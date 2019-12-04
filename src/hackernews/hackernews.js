@@ -69,7 +69,7 @@ export default class Hackernews extends React.Component {
   render() {
     const newsList = this.newsCreate();
     return (
-      <div>
+      <div className = 'wrapper'>
       {newsList}
       </div>
     )

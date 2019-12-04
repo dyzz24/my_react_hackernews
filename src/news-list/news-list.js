@@ -50,7 +50,7 @@ export default class NewsList extends React.Component {
     ));
 
     const state = this.state.newsData;
-    const openedState = this.state.opened;
+    const openedState = this.state.opened ? 'open' : 'close';
 
     return (
       <ul>
@@ -65,10 +65,12 @@ export default class NewsList extends React.Component {
             ></span>
           ) : null}
           {state.kids && state.kids.length > 0 ? (
-            <button onClick={this.loadNews}>Открыть</button>
+            <i className = {'icon button ' +openedState} onClick={this.loadNews}></i>
           ) : null}
-
-          {(kidsView.length > 0 && openedState) ? kidsView : null}
+          <div className = {'news__wrapperState ' + openedState}>
+          {kidsView}
+          </div>
+          
         </li>
       </ul>
     );
