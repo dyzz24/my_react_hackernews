@@ -1,0 +1,16 @@
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    padding-left: 20px;
+    padding-top: 20px;
+}
+
+
+.news {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+}

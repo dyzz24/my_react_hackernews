@@ -1,10 +1,12 @@
 import React from 'react';
 import './App.css';
-import Form from './form/form';
+import Hackernews from './hackernews/hackernews';
+
 
 function App() {
   return (
     <div className="App">
+      <Hackernews></Hackernews>
     </div>
   );
 }
