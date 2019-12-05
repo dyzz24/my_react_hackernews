@@ -70,7 +70,6 @@ export default class NewsList extends React.Component {
           <div className = {'news__wrapperState ' + openedState}>
           {kidsView}
           </div>
-          
         </li>
       </ul>
     );

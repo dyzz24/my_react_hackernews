@@ -2,6 +2,7 @@ import React from 'react';
 import './hackernews.css';
 import Httpservice from '../httpservice/httpservice';
 import NewsList from '../news-list/news-list';
+import { Preloader } from '../preloader/preloader';
 
 
 export default class Hackernews extends React.Component {
@@ -11,7 +12,8 @@ export default class Hackernews extends React.Component {
     this.state = {
       allStorieIdsArray: [],
       visibleNewIdsArray: [],
-      visibleNewsArray: []
+      visibleNewsArray: [],
+      load:false
     };
   }
 
@@ -30,7 +32,8 @@ export default class Hackernews extends React.Component {
   setFirstNewsData(responseArray) {
     this.setState(state => ({
       allStorieIdsArray: [...responseArray],
-      visibleNewIdsArray: responseArray.splice(0, 10)  // * первые 10 новостей, для превьюшки
+      visibleNewIdsArray: responseArray.splice(0, 10),  // * первые 10 новостей, для превьюшки
+      load: true
     }));
 
     if (this.state.visibleNewIdsArray.length > 0) {
@@ -60,7 +63,6 @@ export default class Hackernews extends React.Component {
     const newsList = this.state.visibleNewsArray.map(news => (
 
       <NewsList key = {news.id} newsData = {news} ></NewsList>
-    
     ));
 
     return newsList;
@@ -70,7 +72,8 @@ export default class Hackernews extends React.Component {
     const newsList = this.newsCreate();
     return (
       <div className = 'wrapper'>
-      {newsList}
+        {this.state.load ? newsList : <Preloader></Preloader>}
+
       </div>
     )
   }
