@@ -8,7 +8,7 @@ export default class NewsList extends React.Component {
     this.state = {
       newsData: this.props.newsData,
       opened: false,
-      kids: [],
+      kids: []
     };
 
     console.log(this.state);
@@ -25,14 +25,14 @@ export default class NewsList extends React.Component {
           )
           .then(news => {
             this.setState(state => ({
-              kids: [...state.kids, news],
+              kids: [...state.kids, news]
             }));
           });
       });
 
-      this.setState({opened: true});
+      this.setState({ opened: true });
     } else {
-      this.setState((state) => ({
+      this.setState(state => ({
         opened: !state.opened
       }));
     }
@@ -42,12 +42,27 @@ export default class NewsList extends React.Component {
     return { __html: String(html) };
   };
 
+  scoreColor = scope => {
+    let scopeColor = '';
+    if (scope <= 100) {
+      scopeColor = '#90f854';
+    }
+
+    if (scope <= 200 && scope > 100) {
+      scopeColor = '#f3d738';
+    }
+
+    if (scope > 200) {
+      scopeColor = ' #ff4646';
+    }
+    return scopeColor;
+  };
+
   render() {
-    const kidsView = this.state.kids.map(kids => (
-      <NewsList key={kids.id} newsData={kids}>
-        {' '}
-      </NewsList>
-    ));
+    const kidsView = this.state.kids
+
+      .filter(kids => kids) // * need for not-null objects (else crash) */
+      .map(kids => <NewsList key={kids.id} newsData={kids}></NewsList>);
 
     const state = this.state.newsData;
     const openedState = this.state.opened ? 'open' : 'close';
@@ -56,7 +71,20 @@ export default class NewsList extends React.Component {
       <ul>
         <li className="news">
           <span className="news__title">{state.title}</span>
-          <div className = 'news__txtwrapper'>Автор: <span className="news__author">{state.by}</span></div>
+          <div className="news__txtwrapper">
+            Автор: <span className="news__author">{state.by}</span>
+          </div>
+          {state.score > 0 ? (
+            <div className="news__txtwrapper">
+              Рейтинг:
+              <span
+                className="news__rate"
+                style={{ background: this.scoreColor(state.score) }}
+              >
+                {state.score}
+              </span>
+            </div>
+          ) : null}
 
           {state.text ? (
             <span
@@ -65,13 +93,13 @@ export default class NewsList extends React.Component {
             ></span>
           ) : null}
           {state.kids && state.kids.length > 0 ? (
-            <div className = 'news__btnblock' onClick={this.loadNews}> <span>{this.state.opened ? 'Свернуть' : 'Развернуть'}</span>
-            <i className = {'icon button ' +openedState} ></i>
+            <div className="news__btnblock" onClick={this.loadNews}>
+              
+              <span>{this.state.opened ? 'Свернуть' : 'Развернуть'}</span>
+              <i className={'icon button ' + openedState}></i>
             </div>
           ) : null}
-          <div className = {'news__wrapperState ' + openedState}>
-          {kidsView}
-          </div>
+          <div className={'news__wrapperState ' + openedState}>{kidsView}</div>
         </li>
       </ul>
     );

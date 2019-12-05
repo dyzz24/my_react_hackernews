@@ -17,7 +17,7 @@ ul {
 
 li {
     background: rgba(255, 255, 255, 0.05);
-    padding: 15px;
+    padding: 15px 15px 15px 35px;
     margin-bottom: 10px;
 }
 
@@ -105,7 +105,19 @@ p {
 .news__txtwrapper {
     display: flex;
     align-items: center;
+    margin-bottom: 8px;
 }
+
+.news__rate {
+    padding: 4px 8px;
+    border-radius: 40%;
+    background: #ff4646;
+    margin-left: 8px;
+    color: #2b2929;
+    font-size: 12px;
+}
+
+
 
 
 
