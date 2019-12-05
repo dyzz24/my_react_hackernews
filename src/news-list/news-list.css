@@ -28,6 +28,13 @@ li {
   align-items: flex-start;
   justify-content: center;
   flex-direction: column;
+  position: relative;
+  box-sizing: border-box;
+  margin-left: 30px;
+}
+
+.news__wrapperState {
+    width: 100%;
 }
 
 .news__wrapperState.close {
@@ -115,6 +122,11 @@ p {
     margin-left: 8px;
     color: #2b2929;
     font-size: 12px;
+}
+
+.news__deleted {
+    color: #ff4646;
+    font-size: 28px;
 }
 
 

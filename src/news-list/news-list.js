@@ -2,6 +2,7 @@ import React from 'react';
 import './news-list.css';
 import Httpservice from '../httpservice/httpservice';
 import ListItem from '../list-item/list-item';
+import { Preloader } from '../preloader/preloader';
 
 export default class NewsList extends React.Component {
   constructor(props) {
@@ -9,7 +10,8 @@ export default class NewsList extends React.Component {
     this.state = {
       newsData: this.props.newsData,
       opened: false,
-      kids: []
+      kids: [],
+      loading: false
     };
 
     console.log(this.state);
@@ -18,15 +20,23 @@ export default class NewsList extends React.Component {
 
   loadNews = () => {
     if (this.state.kids.length === 0) {
-      this.state.newsData.kids.forEach(id => {
+      // * enable preloader*/
+      this.setState({ loading: true });
+      let counter = 0;
+      this.state.newsData.kids.forEach((id, index, arr) => {
         this.service
           .getData(
             `https://hacker-news.firebaseio.com/v0/item/${id}.json?print=pretty`
           )
           .then(news => {
+            counter = counter + 1;
             this.setState(state => ({
               kids: [...state.kids, news]
             }));
+            // * грузанули все новости*/
+            if (arr.length === counter) {
+              this.setState({ loading: false });
+            }
           });
       });
 
@@ -37,10 +47,6 @@ export default class NewsList extends React.Component {
       }));
     }
   };
-
-
-
-
 
   render() {
     const kidsView = this.state.kids
@@ -53,12 +59,18 @@ export default class NewsList extends React.Component {
 
     return (
       <ul>
-        <ListItem
-        state = {state}
-        openedState = {openedState}
-        kidsView = {kidsView}
-        loadNews = {this.loadNews}
-        ></ListItem>
+
+        {this.state.loading ? (
+          <Preloader></Preloader>
+        ) : (
+          <ListItem
+            state={state}
+            openedState={openedState}
+            kidsView={kidsView}
+            loadNews={this.loadNews}
+            loading = {this.state.loading}
+          ></ListItem>
+        )}
       </ul>
     );
   }

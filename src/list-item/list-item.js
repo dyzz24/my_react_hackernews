@@ -1,4 +1,5 @@
 import React from 'react';
+import { Preloader } from '../preloader/preloader';
 
 
 
@@ -38,6 +39,8 @@ export default class ListItem extends React.Component {
   return (
 
     <li className="news">
+      {this.props.loading ? <Preloader></Preloader> : null}
+      {this.props.state.deleted ? <p className = 'news__deleted'>Запись удалена</p>: null}
     <span className="news__title">{this.props.state.title}</span>
     <div className="news__txtwrapper">
       Автор: <span className="news__author">{this.props.state.by}</span>
@@ -63,7 +66,7 @@ export default class ListItem extends React.Component {
     {this.props.state.kids && this.props.state.kids.length > 0 ? (
       <div className="news__btnblock" onClick={this.loadNews}>
         
-        <span>{this.props.state.opened ? 'Свернуть' : 'Развернуть'}</span>
+        <span>{this.props.openedState === 'open' ? 'Свернуть' : 'Развернуть'}</span>
         <i className={'icon button ' + this.props.openedState}></i>
       </div>
     ) : null}
