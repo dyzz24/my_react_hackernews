@@ -17,6 +17,7 @@ export default class NewsList extends React.Component {
 
   loadNews = () => {
     if (this.state.kids.length === 0) {
+      let counter = 0;
       this.state.newsData.kids.forEach(id => {
         this.service
           .getData(
@@ -26,7 +27,6 @@ export default class NewsList extends React.Component {
             this.setState(state => ({
               kids: [...state.kids, news],
             }));
-            console.log(this.state);
           });
       });
 
@@ -56,7 +56,7 @@ export default class NewsList extends React.Component {
       <ul>
         <li className="news">
           <span className="news__title">{state.title}</span>
-          <span className="news__author">{state.by}</span>
+          <div className = 'news__txtwrapper'>Автор: <span className="news__author">{state.by}</span></div>
 
           {state.text ? (
             <span
@@ -65,7 +65,9 @@ export default class NewsList extends React.Component {
             ></span>
           ) : null}
           {state.kids && state.kids.length > 0 ? (
-            <i className = {'icon button ' +openedState} onClick={this.loadNews}></i>
+            <div className = 'news__btnblock' onClick={this.loadNews}> <span>{this.state.opened ? 'Свернуть' : 'Развернуть'}</span>
+            <i className = {'icon button ' +openedState} ></i>
+            </div>
           ) : null}
           <div className = {'news__wrapperState ' + openedState}>
           {kidsView}
