@@ -1,5 +1,6 @@
 import React from 'react';
 import { Preloader } from '../preloader/preloader';
+import { Link } from "react-router-dom";
 
 
 
@@ -42,8 +43,10 @@ export default class ListItem extends React.Component {
       {this.props.loading ? <Preloader></Preloader> : null}
       {this.props.state.deleted ? <p className = 'news__deleted'>Запись удалена</p>: null}
     <span className="news__title">{this.props.state.title}</span>
-    <div className="news__txtwrapper">
-      Автор: <span className="news__author">{this.props.state.by}</span>
+    <div className="news__txtwrapper tohover">
+      Автор: <span className="news__author">{this.props.state.by}
+      </span>
+      <Link className = 'news__userlink' to={`/user/${this.props.state.by}`}></Link>
     </div>
     {this.props.state.score > 0 ? (
       <div className="news__txtwrapper">

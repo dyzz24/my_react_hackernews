@@ -54,6 +54,7 @@ li {
     border-radius: 5px;
     font-size: 14px;
     margin-left: 8px;
+    cursor: pointer;
 }
 
 .news__text {
@@ -113,6 +114,8 @@ p {
     display: flex;
     align-items: center;
     margin-bottom: 8px;
+    position: relative;
+    transition: .4s;
 }
 
 .news__rate {
@@ -127,6 +130,25 @@ p {
 .news__deleted {
     color: #ff4646;
     font-size: 28px;
+}
+
+.news__userlink {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 2;
+}
+
+.tohover {
+    border-bottom: 1px solid #4badf4;
+    
+}
+
+.tohover:hover {
+    color: #4badf4;
+    border-color: #ff4646;
 }
 
 
