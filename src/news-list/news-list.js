@@ -15,7 +15,6 @@ export default class NewsList extends React.Component {
       loading: false
     };
 
-    console.log(this.state);
   }
   service = new Httpservice();
 

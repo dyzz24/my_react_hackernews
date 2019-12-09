@@ -1,14 +1,14 @@
 import React from 'react';
 import './userinfo.css';
 import Httpservice from '../httpservice/httpservice';
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 export class Userinfo extends React.Component {
 
   constructor(props) {
     super(props);
 
-    this.state = {userData: {}}
+    this.state = {userData: {}, return: false}
 
   }
 
@@ -18,7 +18,6 @@ export class Userinfo extends React.Component {
     // const test = this.match;
     const userId = this.props.match.params.id;
     this.getUserInfo(userId)
-    console.log(userId)
   }
 
   getUserInfo(userId) {
@@ -26,7 +25,7 @@ export class Userinfo extends React.Component {
           .getData(
             `https://hacker-news.firebaseio.com/v0/user/${userId}.json?print=pretty`
           )
-          .then(userInfo => {console.log(userInfo)
+          .then(userInfo => {
           this.setState({userData: userInfo});
           });
   }
@@ -36,8 +35,10 @@ export class Userinfo extends React.Component {
     return data;
   }
 
-  closePopup = () => {
-    console.log(this.props.navigation);
+  closePopup = (e) => {
+    if(e.target.className === 'userpopup') {
+      this.setState({return: true})
+    }
   }
 
   createMarkup = html => {
@@ -48,13 +49,13 @@ export class Userinfo extends React.Component {
   render() {
   return (
 
-    <div className = 'userpopup' onClick = {this.closePopup}>
+    <div className = 'userpopup' onClick = {e => this.closePopup(e)}>
     <div className = 'user'>
       <div className = 'user__info'>
         <div className = 'header'>
           <span>Информация о пользователе</span>
-         
           <Link to = '/' className = 'close'></Link>
+          {this.state.return ? <Redirect to='/'/> : null}
         </div>
       <div className = 'user__avatar'>
         <div className = 'user__name'>{this.state.userData.id}</div>

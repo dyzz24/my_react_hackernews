@@ -25,7 +25,6 @@ export default class Hackernews extends React.Component {
   componentDidMount() {
     this.service.getData('https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty').then(allNewsArray => {
       this.setFirstNewsData(allNewsArray)
-      console.log(this.state);
     })
   }
 
@@ -47,7 +46,6 @@ export default class Hackernews extends React.Component {
       this.setState(state => ({
         visibleNewsArray: [...state.visibleNewsArray, fullNews]
       }));
-      console.log(this.state);
     })
     })
   }
