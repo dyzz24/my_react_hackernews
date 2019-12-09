@@ -1,7 +1,7 @@
 import React from 'react';
 import './userinfo.css';
 import Httpservice from '../httpservice/httpservice';
-
+import { Link } from "react-router-dom";
 
 export class Userinfo extends React.Component {
 
@@ -36,20 +36,32 @@ export class Userinfo extends React.Component {
     return data;
   }
 
+  closePopup = () => {
+    console.log(this.props.navigation);
+  }
+
+  createMarkup = html => {
+    return { __html: String(html) };
+  };
+
 
   render() {
   return (
 
-    <div className = 'userpopup'>
+    <div className = 'userpopup' onClick = {this.closePopup}>
     <div className = 'user'>
       <div className = 'user__info'>
-        <div className = 'header'></div>
+        <div className = 'header'>
+          <span>Информация о пользователе</span>
+         
+          <Link to = '/' className = 'close'></Link>
+        </div>
       <div className = 'user__avatar'>
         <div className = 'user__name'>{this.state.userData.id}</div>
       </div>
       <div className = 'info__txt'>
         <p>О пользователе:</p>
-          <p className = 'maintxt'>{this.state.userData.about}</p>
+          <p className = 'maintxt' dangerouslySetInnerHTML={this.createMarkup(this.state.text || 'Не задано')}></p>
 
           <p>Зарегистрирован:</p>
           <p className = 'maintxt'>{this.timePipe(this.state.userData.created)}</p>
