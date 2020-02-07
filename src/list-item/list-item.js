@@ -1,21 +1,13 @@
 import React from 'react';
 import { Preloader } from '../preloader/preloader';
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
+const ListItem = props => {
+  const loadNews = () => {
+    props.loadNews();
+  };
 
-
-export default class ListItem extends React.Component {
-  constructor(props) {
-    super();
-
-  }
-
-
-  loadNews = () => {
-      this.props.loadNews();
-  }
-
-  scoreColor = scope => {
+  const scoreColor = scope => {
     let scopeColor = '';
     if (scope <= 100) {
       scopeColor = '#90f854';
@@ -31,54 +23,76 @@ export default class ListItem extends React.Component {
     return scopeColor;
   };
 
-  createMarkup = html => {
+  const createMarkup = html => {
     return { __html: String(html) };
   };
 
-
-  render() {
-  return (
-
-    <li className="news">
-      {this.props.loading ? <Preloader></Preloader> : null}
-      {this.props.state.deleted ? <p className = 'news__deleted'>Запись удалена</p>: null}
-    <span className="news__title">{this.props.state.title}</span>
-    <div className="news__txtwrapper tohover">
-      Автор: <span className="news__author">{this.props.state.by}
-      </span>
-      <Link className = 'news__userlink' to={`/user/${this.props.state.by}`}></Link>
-    </div>
-    {this.props.state.score > 0 ? (
-      <div className="news__txtwrapper">
-        Рейтинг:
-        <span
-          className="news__rate"
-          style={{ background: this.scoreColor(this.props.state.score) }}
-        >
-          {this.props.state.score}
-        </span>
+  const showAuthor = () => {
+    return (
+      <div className='news__txtwrapper tohover'>
+        Автор: <span className='news__author'>{props.state.by}</span>
+        <Link className='news__userlink' to={`/user/${props.state.by}`}></Link>
       </div>
-    ) : null}
+    );
+  };
 
-    {this.props.state.text ? (
-      <span
-        className="news__text"
-        dangerouslySetInnerHTML={this.createMarkup(this.props.state.text)}
-      ></span>
-    ) : null}
-    {this.props.state.kids && this.props.state.kids.length > 0 ? (
-      <div className="news__btnblock" onClick={this.loadNews}>
-        
-        <span>{this.props.openedState === 'open' ? 'Свернуть' : 'Развернуть'}</span>
-        <i className={'icon button ' + this.props.openedState}></i>
-      </div>
-    ) : null}
-    <div className={'news__wrapperState ' + this.props.openedState}>{this.props.kidsView}</div>
-  </li>
-
-
-  );
+  const showPreloadDeleteArticle = () => {
+    if (props.loading) {
+      return <Preloader></Preloader>;
+    } else if (props.state.deleted) {
+      return <p className='news__deleted'>Запись удалена</p>;
     }
+  };
 
-}
+  const showScope = () => {
+    if (props.state.score > 0) {
+      return (
+        <div className='news__txtwrapper'>
+          Рейтинг:
+          <span
+            className='news__rate'
+            style={{ background: scoreColor(props.state.score) }}
+          >
+            {props.state.score}
+          </span>
+        </div>
+      );
+    }
+  };
 
+  const showText = () => {
+    if(props.state.text) {
+        return(<span
+          className='news__text'
+          dangerouslySetInnerHTML={createMarkup(props.state.text)}
+        ></span>)
+    }
+  }
+
+  const showKids = () => {
+    if(props.state.kids && props.state.kids.length > 0) {
+      return (<div className='news__btnblock' onClick={loadNews}>
+      <span>
+        {props.openedState === 'open' ? 'Свернуть' : 'Развернуть'}
+      </span>
+      <i className={'icon button ' + props.openedState}></i>
+    </div>)
+    }
+  }
+
+  return (
+    <li className='news'>
+      {showPreloadDeleteArticle()}
+      <span className='news__title'>{props.state.title}</span>
+      {showAuthor()}
+      {showScope()}
+      {showText()}
+      {showKids()}
+      <div className={'news__wrapperState ' + props.openedState}>
+        {props.kidsView}
+      </div>
+    </li>
+  );
+};
+
+export default ListItem;
