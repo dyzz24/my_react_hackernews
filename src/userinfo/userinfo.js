@@ -1,74 +1,69 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './userinfo.css';
 import Httpservice from '../httpservice/httpservice';
 import { Link, Redirect } from "react-router-dom";
 
-export class Userinfo extends React.Component {
+export const Userinfo = (props) => {
 
-  constructor(props) {
-    super(props);
+  const service = new Httpservice();
+  const [userData, setUserData] = useState({});
+  const [returned, setReturned] = useState(false);
 
-    this.state = {userData: {}, return: false}
+  useEffect(() =>{
+    const userId = props.match.params.id;
+    getUserInfo(userId)
+  } , [])
 
-  }
 
-  service = new Httpservice();
 
-  componentDidMount() {
-    // const test = this.match;
-    const userId = this.props.match.params.id;
-    this.getUserInfo(userId)
-  }
-
-  getUserInfo(userId) {
-    this.service
+ const getUserInfo = (userId) => {
+    service
           .getData(
             `https://hacker-news.firebaseio.com/v0/user/${userId}.json?print=pretty`
           )
           .then(userInfo => {
-          this.setState({userData: userInfo});
+          setUserData(userInfo)
           });
   }
   
-  timePipe = (time) => {
+ const timePipe = (time) => {
     const data = new Date(time * 1000).toUTCString();
     return data;
   }
 
-  closePopup = (e) => {
+ const closePopup = (e) => {
     if(e.target.className === 'userpopup') {
-      this.setState({return: true})
+      setReturned(true)
     }
   }
 
-  createMarkup = html => {
+ const createMarkup = html => {
     return { __html: String(html) };
   };
 
 
-  render() {
   return (
 
-    <div className = 'userpopup' onClick = {e => this.closePopup(e)}>
+    <div className = 'userpopup' onClick = {e => closePopup(e)}>
     <div className = 'user'>
       <div className = 'user__info'>
         <div className = 'header'>
           <span>Информация о пользователе</span>
           <Link to = '/' className = 'close'></Link>
-          {this.state.return ? <Redirect to='/'/> : null}
+          {returned ? <Redirect to='/'/> : null}
         </div>
       <div className = 'user__avatar'>
-        <div className = 'user__name'>{this.state.userData.id}</div>
+        <div className = 'user__name'>{userData.id}</div>
       </div>
       <div className = 'info__txt'>
         <p>О пользователе:</p>
-          <p className = 'maintxt' dangerouslySetInnerHTML={this.createMarkup(this.state.text || 'Не задано')}></p>
+          <p className = 'maintxt' dangerouslySetInnerHTML={createMarkup(userData.about || 'Не задано')}></p>
 
           <p>Зарегистрирован:</p>
-          <p className = 'maintxt'>{this.timePipe(this.state.userData.created)}</p>
+          <p className = 'maintxt'>{timePipe(userData.created)}</p>
 
           <p>Репутация:</p>
-          <p className = 'maintxt'>{this.state.userData.karma}</p>
+          <p className = 'maintxt'>{userData.karma}</p>
       </div>
       </div>
     </div>
@@ -76,10 +71,7 @@ export class Userinfo extends React.Component {
 
 
   );
-  }
-
-
-
 
 }
+
 
