@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import './userinfo.css';
 import Httpservice from '../httpservice/httpservice';
 import { Link, Redirect } from "react-router-dom";
+import { Preloader } from '../preloader/preloader';
 
 export const Userinfo = (props) => {
 
   const service = new Httpservice();
   const [userData, setUserData] = useState({});
   const [returned, setReturned] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() =>{
     const userId = props.match.params.id;
@@ -22,7 +24,8 @@ export const Userinfo = (props) => {
             `https://hacker-news.firebaseio.com/v0/user/${userId}.json?print=pretty`
           )
           .then(userInfo => {
-          setUserData(userInfo)
+          setUserData(userInfo);
+          setLoaded(true);
           });
   }
   
@@ -41,11 +44,8 @@ export const Userinfo = (props) => {
     return { __html: String(html) };
   };
 
-
-  return (
-
-    <div className = 'userpopup' onClick = {e => closePopup(e)}>
-    <div className = 'user'>
+ const showUserData = () => {
+      return(<div className = 'user'>
       <div className = 'user__info'>
         <div className = 'header'>
           <span>Информация о пользователе</span>
@@ -66,7 +66,14 @@ export const Userinfo = (props) => {
           <p className = 'maintxt'>{userData.karma}</p>
       </div>
       </div>
-    </div>
+    </div>)
+  }
+
+
+  return (
+
+    <div className = 'userpopup' onClick = {e => closePopup(e)}>
+      {loaded ? showUserData() : <Preloader></Preloader>}
     </div>
 
 
